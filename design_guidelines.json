@@ -1,0 +1,185 @@
+{
+  "project_name": "Safe Steps",
+  "app_type": "marketing_site",
+  "language": "es",
+  "theme": "dark",
+  "archetype": "5 - Jewel & Luxury (High-Tech Variant)",
+  "emotional_tone": "Innovación tecnológica, seguridad, confianza, simplicidad, profesionalismo, elegancia sin ser fría",
+  "design_philosophy": {
+    "core_principles": [
+      "Full dark mode: utilizing deep navy and obsidian to convey luxury and security.",
+      "Minimalist & Modern: Generous spacing (2-3x default), asymmetrical layouts.",
+      "Micro-interactions: Subtle glow accents, smooth staggered entrance animations, hover states revealing product benefits.",
+      "Professional but warm: Avoid sterile 'fintech' coldness by using subtle noise/grain textures and elegant typography."
+    ],
+    "anti_patterns": [
+      "NO purple or violet gradients.",
+      "NO generic Inter or Roboto fonts.",
+      "NO fully symmetric boring center-aligned layouts."
+    ]
+  },
+  "typography": {
+    "primary_font": "General Sans",
+    "secondary_font": "Geist",
+    "rules": {
+      "headings": {
+        "family": "General Sans, sans-serif",
+        "weight": "font-medium to font-bold",
+        "tracking": "tracking-tight to tracking-tighter",
+        "scale": "text-4xl sm:text-5xl lg:text-6xl for Hero (H1), text-3xl to 4xl for H2"
+      },
+      "body": {
+        "family": "Geist, sans-serif",
+        "weight": "font-normal",
+        "tracking": "tracking-normal",
+        "line_height": "leading-relaxed",
+        "scale": "text-base sm:text-lg"
+      },
+      "labels": {
+        "family": "Geist, sans-serif",
+        "style": "uppercase tracking-[0.2em] text-xs font-semibold"
+      }
+    }
+  },
+  "color_palette": {
+    "background": {
+      "main": "#0A0A0A",
+      "surface_1": "#111827",
+      "surface_2": "#1C1C1E"
+    },
+    "text": {
+      "primary": "#FFFFFF",
+      "secondary": "#9CA3AF",
+      "accent": "#374151"
+    },
+    "brand": {
+      "primary": "#0B1B3A",
+      "accent": "#FFFFFF",
+      "border": "#374151"
+    },
+    "gradients": {
+      "glow": "bg-gradient-to-tr from-[#0B1B3A]/20 to-transparent",
+      "hero_overlay": "bg-gradient-to-b from-black/30 via-black/60 to-[#0A0A0A]"
+    }
+  },
+  "spacing_and_layout": {
+    "padding_scale": "Use p-8, p-12, p-16, p-24 for large sections. Containers with borders must have internal padding (p-6 or p-8).",
+    "grid_system": "Use asymmetrical bento grids for 'Sobre Nosotros' and 'Cómo Funciona'. (e.g., col-span-8 and col-span-4).",
+    "alignment": "Prioritize optical alignment. Left-align dense text blocks and product information. Avoid default center alignment."
+  },
+  "surfaces_and_components": {
+    "cards": {
+      "style": "Glassmorphism or solid dark. bg-[#111827]/80 backdrop-blur-xl border border-[#374151]/40 rounded-2xl.",
+      "hover": "Hover lifts the card slightly (-translate-y-1), increases border opacity, and adds a subtle shadow shadow-[0_8px_32px_rgba(11,27,58,0.3)]."
+    },
+    "buttons": {
+      "primary": "bg-white text-[#0A0A0A] font-semibold hover:bg-gray-200 transition-colors px-6 py-3 rounded-full",
+      "secondary": "bg-[#0B1B3A] text-white font-medium hover:bg-[#0B1B3A]/80 border border-[#374151] px-6 py-3 rounded-full",
+      "floating_contact": "fixed bottom-6 right-6 bg-white text-black p-4 rounded-full shadow-lg hover:scale-105 transition-transform z-50 flex items-center justify-center"
+    },
+    "product_gallery": {
+      "card_behavior": "On hover, the main product image dims or scales up slightly, revealing the description, colors, and benefits text overlaid or sliding up. Includes a prominent 'Comprar' button."
+    },
+    "navigation": {
+      "style": "Sticky top-0 z-50 backdrop-blur-md bg-[#0A0A0A]/70 border-b border-[#374151]/30",
+      "links": "Hover state: text-white, default: text-gray-400"
+    }
+  },
+  "motion_and_interaction": {
+    "scroll": "Smooth scrolling via CSS (scroll-behavior: smooth).",
+    "entrance": "Staggered fade-up animations (Framer Motion) for grid items and gallery products.",
+    "microinteractions": "Buttons scale down slightly on active/click. Subtly glowing borders on hover."
+  },
+  "accessibility": {
+    "contrast": "Ensure white text on deep navy/obsidian backgrounds passes WCAG AA.",
+    "focus": "focus:ring-2 focus:ring-white/50 focus:outline-none",
+    "test_attributes": "All buttons, form inputs, and key navigation links MUST have data-testid attributes."
+  },
+  "sections_breakdown": [
+    {
+      "id": "hero",
+      "name": "Inicio",
+      "description": "Main banner with tagline 'Contigo en cada momento'. Background uses an abstract dark luxury texture. Dual CTAs: 'Descarga la App' and 'Compra ahora'.",
+      "components": ["Navbar", "Hero Title", "Subtitle", "Primary CTA", "Secondary CTA", "Background Image with dark overlay"]
+    },
+    {
+      "id": "about",
+      "name": "Sobre Nosotros",
+      "description": "Bento grid layout detailing history, mission, and philosophy (security, accessible tech, user accompaniment).",
+      "components": ["Section Header", "Bento Grid Cards (Misión, Valores, Filosofía)"]
+    },
+    {
+      "id": "products",
+      "name": "Productos",
+      "description": "Gallery with category filters (necklaces, bracelets, hair clips). Cards show benefits, colors, and buy button on hover.",
+      "components": ["Filter Tabs", "Product Grid", "Product Card with hover overlay (Beneficios, Swatches, Botón de compra)"]
+    },
+    {
+      "id": "how-it-works",
+      "name": "Asesoría / Cómo funciona",
+      "description": "Step-by-step visual explanation of app and product integration. CTA to schedule advisory session.",
+      "components": ["Step List / Timeline", "Illustrative Icons/Images", "CTA Button (Agendar Asesoría)"]
+    },
+    {
+      "id": "app",
+      "name": "Acceso a la App",
+      "description": "Showcase of the mobile app advantages with iOS and Android download badges.",
+      "components": ["Mobile Mockup Image", "Feature List", "Store Badges (iOS/Android)"]
+    },
+    {
+      "id": "contact",
+      "name": "Contacto",
+      "description": "Support form and contact info (email, phone, social media).",
+      "components": ["Contact Form", "Support Info Grid", "Social Links", "Footer"]
+    }
+  ],
+  "media": {
+    "logos": {
+      "brand_logo": {
+        "url": "https://customer-assets.emergentagent.com/job_8d179e08-0379-4d4b-96f3-81a1c4b666ac/artifacts/k6uestzz_safe%20step%20logo.jpeg",
+        "description": "Safe Steps Logo"
+      },
+      "brand_logo_dark": {
+        "url": "https://customer-assets.emergentagent.com/job_8d179e08-0379-4d4b-96f3-81a1c4b666ac/artifacts/lqnvqqt4_safe%20steps%20portada.jpeg",
+        "description": "Safe Steps Dark Logo with tagline"
+      }
+    },
+    "mockups": {
+      "mobile_reference": {
+        "url": "https://customer-assets.emergentagent.com/job_8d179e08-0379-4d4b-96f3-81a1c4b666ac/artifacts/vi1nidbw_WhatsApp%20Image%202026-05-06%20at%2010.24.59%20PM%20%281%29.jpeg",
+        "description": "Mobile app mockup reference for App Section"
+      },
+      "desktop_reference": {
+        "url": "https://customer-assets.emergentagent.com/job_8d179e08-0379-4d4b-96f3-81a1c4b666ac/artifacts/k6oowgru_WhatsApp%20Image%202026-05-06%20at%2010.24.59%20PM.jpeg",
+        "description": "Desktop mockup reference"
+      }
+    },
+    "images": {
+      "hero_bg": {
+        "url": "https://images.unsplash.com/photo-1642945538257-d1e69abfb085?crop=entropy&cs=srgb&fm=jpg&ixid=M3w4NjY2NzV8MHwxfHNlYXJjaHwyfHxkYXJrJTIwbHV4dXJ5JTIwbWluaW1hbCUyMGFic3RyYWN0JTIwYmFja2dyb3VuZHxlbnwwfHx8fDE3NzgyNjczMTB8MA&ixlib=rb-4.1.0&q=85",
+        "description": "Abstract dark luxury background for Hero section"
+      },
+      "product_necklace": {
+        "url": "https://images.unsplash.com/photo-1680200256120-8ac04eb6f01d?crop=entropy&cs=srgb&fm=jpg&ixid=M3w4NjA1MDZ8MHwxfHNlYXJjaHw0fHxtaW5pbWFsaXN0JTIwZWxlZ2FudCUyMG5lY2tsYWNlJTIwamV3ZWxyeSUyMGRhcmslMjBiYWNrZ3JvdW5kfGVufDB8fHx8MTc3ODI2NzMxMHww&ixlib=rb-4.1.0&q=85",
+        "description": "Minimalist elegant necklace in dark setting for product gallery"
+      },
+      "product_bracelet": {
+        "url": "https://images.unsplash.com/photo-1762539297259-2bb6eea568e4?crop=entropy&cs=srgb&fm=jpg&ixid=M3w3NDQ2NDF8MHwxfHNlYXJjaHwyfHxtaW5pbWFsaXN0JTIwZWxlZ2FudCUyMGJyYWNlbGV0JTIwamV3ZWxyeSUyMGRhcmslMjBiYWNrZ3JvdW5kfGVufDB8fHx8MTc3ODI2NzMxMHww&ixlib=rb-4.1.0&q=85",
+        "description": "Elegant bracelet/beads in dark setting for product gallery"
+      },
+      "lifestyle_about": {
+        "url": "https://images.unsplash.com/photo-1746973506116-7a11e7de61ad?crop=entropy&cs=srgb&fm=jpg&ixid=M3w4NjAzMzJ8MHwxfHNlYXJjaHw0fHx3b21hbiUyMHdlYXJpbmclMjBlbGVnYW50JTIwbWluaW1hbGlzdCUyMG5lY2tsYWNlJTIwZGFyayUyMGJhY2tncm91bmR8ZW58MHx8fHwxNzc4MjY3MzAwfDA&ixlib=rb-4.1.0&q=85",
+        "description": "Woman in dramatic lighting, luxury jewelry lifestyle shot for About or App section"
+      }
+    }
+  },
+  "instructions_to_main_agent": [
+    "Strictly follow the color palette provided: #0B1B3A (Azul Profundo), #1C1C1E (Negro Carbón), #374151 (Gris Acero), #111827 (Azul Nocturno), #0A0A0A (Negro Obsidiana), #FFFFFF (Blanco). Do NOT use generic tailwind colors that break this scheme.",
+    "Do NOT use Inter or Roboto. Use 'General Sans' or 'Geist'. Install via fontsource if necessary.",
+    "Ensure the hero background has a dark overlay to maintain text readability.",
+    "Implement the product cards with a hover effect where the benefits and 'Comprar' button slide up or fade in.",
+    "Add a floating contact button fixed at the bottom right corner on all pages.",
+    "All text content must be in Spanish as requested.",
+    "Include data-testid on all interactive elements (buttons, links, form inputs) as per testing guidelines."
+  ]
+}
