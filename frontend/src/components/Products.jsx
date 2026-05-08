@@ -120,8 +120,8 @@ export const Products = () => {
               <article
                 key={p.id}
                 data-testid={`product-card-${p.id}`}
-                className="reveal product-card rounded-2xl"
-                style={{ transitionDelay: `${idx * 50}ms` }}
+                className="product-card product-card-enter rounded-2xl"
+                style={{ animationDelay: `${idx * 60}ms` }}
               >
                 <div className="relative aspect-[4/5] overflow-hidden">
                   <img
