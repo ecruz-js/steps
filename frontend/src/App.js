@@ -11,7 +11,19 @@ import AppSection from "@/components/AppSection";
 import Contact from "@/components/Contact";
 import Footer from "@/components/Footer";
 import FloatingContact from "@/components/FloatingContact";
+import CartDrawer from "@/components/CartDrawer";
 import useRevealOnScroll from "@/hooks/useRevealOnScroll";
+
+import { CartProvider } from "@/context/CartContext";
+import { AuthProvider } from "@/context/AuthContext";
+import { SettingsProvider } from "@/context/SettingsContext";
+
+import AdminLogin from "@/pages/admin/AdminLogin";
+import AdminLayout from "@/pages/admin/AdminLayout";
+import AdminDashboard from "@/pages/admin/AdminDashboard";
+import AdminProducts from "@/pages/admin/AdminProducts";
+import AdminOrders from "@/pages/admin/AdminOrders";
+import AdminSettings from "@/pages/admin/AdminSettings";
 
 const Landing = () => {
   useRevealOnScroll();
@@ -26,6 +38,7 @@ const Landing = () => {
       <Contact />
       <Footer />
       <FloatingContact />
+      <CartDrawer />
     </main>
   );
 };
@@ -33,22 +46,35 @@ const Landing = () => {
 function App() {
   return (
     <div className="App">
-      <BrowserRouter>
-        <Routes>
-          <Route path="/" element={<Landing />} />
-        </Routes>
-      </BrowserRouter>
-      <Toaster
-        theme="dark"
-        position="top-right"
-        toastOptions={{
-          style: {
-            background: "#111827",
-            border: "1px solid rgba(255,255,255,0.08)",
-            color: "#fff",
-          },
-        }}
-      />
+      <SettingsProvider>
+        <AuthProvider>
+          <CartProvider>
+            <BrowserRouter>
+              <Routes>
+                <Route path="/" element={<Landing />} />
+                <Route path="/admin/login" element={<AdminLogin />} />
+                <Route path="/admin" element={<AdminLayout />}>
+                  <Route index element={<AdminDashboard />} />
+                  <Route path="products" element={<AdminProducts />} />
+                  <Route path="orders" element={<AdminOrders />} />
+                  <Route path="settings" element={<AdminSettings />} />
+                </Route>
+              </Routes>
+            </BrowserRouter>
+            <Toaster
+              theme="dark"
+              position="top-right"
+              toastOptions={{
+                style: {
+                  background: "#111827",
+                  border: "1px solid rgba(255,255,255,0.08)",
+                  color: "#fff",
+                },
+              }}
+            />
+          </CartProvider>
+        </AuthProvider>
+      </SettingsProvider>
     </div>
   );
 }

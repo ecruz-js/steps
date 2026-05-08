@@ -2,6 +2,8 @@ import { useEffect, useState } from "react";
 import axios from "axios";
 import { ShoppingBag, ArrowUpRight, Check } from "lucide-react";
 import { toast } from "sonner";
+import { useCart } from "@/context/CartContext";
+import { useSettings, formatPrice } from "@/context/SettingsContext";
 
 const API = `${process.env.REACT_APP_BACKEND_URL}/api`;
 
@@ -16,6 +18,8 @@ export const Products = () => {
   const [products, setProducts] = useState([]);
   const [filter, setFilter] = useState("todos");
   const [loading, setLoading] = useState(true);
+  const { add } = useCart();
+  const { settings } = useSettings();
 
   useEffect(() => {
     const load = async () => {
@@ -36,9 +40,7 @@ export const Products = () => {
   }, [filter]);
 
   const handleBuy = (p) => {
-    toast.success(`${p.name} agregado al carrito`, {
-      description: `$${p.price.toFixed(2)} · Stock disponible`,
-    });
+    add(p);
   };
 
   return (
@@ -174,10 +176,10 @@ export const Products = () => {
                     </div>
                     <div className="text-right">
                       <div className="font-display text-xl tracking-tight">
-                        ${p.price.toFixed(0)}
+                        {formatPrice(p.price, settings.currency_symbol)}
                       </div>
                       <div className="text-[10px] text-white/40 uppercase tracking-wider">
-                        USD
+                        {settings.currency}
                       </div>
                     </div>
                   </div>
@@ -201,7 +203,7 @@ export const Products = () => {
                       className="btn-press flex-1 inline-flex items-center justify-center gap-2 rounded-full bg-white text-[#0A0A0A] py-2.5 text-sm font-semibold hover:bg-white/90 transition"
                     >
                       <ShoppingBag size={14} />
-                      Comprar
+                      Añadir
                     </button>
                     <a
                       href="#contact"

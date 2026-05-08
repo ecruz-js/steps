@@ -2,10 +2,12 @@ import { useState } from "react";
 import axios from "axios";
 import { Mail, Phone, Instagram, Send, Loader2 } from "lucide-react";
 import { toast } from "sonner";
+import { useSettings } from "@/context/SettingsContext";
 
 const API = `${process.env.REACT_APP_BACKEND_URL}/api`;
 
 export const Contact = () => {
+  const { settings } = useSettings();
   const [form, setForm] = useState({
     name: "",
     email: "",
@@ -68,22 +70,22 @@ export const Contact = () => {
               {
                 icon: Mail,
                 label: "Correo",
-                value: "hola@safesteps.app",
-                href: "mailto:hola@safesteps.app",
+                value: settings.contact_email,
+                href: `mailto:${settings.contact_email}`,
                 testid: "contact-email",
               },
               {
                 icon: Phone,
                 label: "Teléfono",
-                value: "+52 55 1234 5678",
-                href: "tel:+525512345678",
+                value: settings.contact_phone,
+                href: `tel:${(settings.contact_phone || "").replace(/[^\d+]/g, "")}`,
                 testid: "contact-phone",
               },
               {
                 icon: Instagram,
                 label: "Instagram",
-                value: "@safesteps.app",
-                href: "https://instagram.com/safesteps.app",
+                value: settings.instagram,
+                href: `https://instagram.com/${(settings.instagram || "").replace("@", "")}`,
                 testid: "contact-instagram",
               },
             ].map(({ icon: Icon, label, value, href, testid }) => (

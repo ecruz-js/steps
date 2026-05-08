@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
-import { Menu, X } from "lucide-react";
+import { Menu, X, ShoppingBag } from "lucide-react";
+import { useCart } from "@/context/CartContext";
 
 const NAV = [
   { label: "Inicio", href: "#hero" },
@@ -13,6 +14,7 @@ const NAV = [
 export const Navbar = () => {
   const [scrolled, setScrolled] = useState(false);
   const [open, setOpen] = useState(false);
+  const { count, setOpen: setCartOpen } = useCart();
 
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 16);
@@ -59,6 +61,22 @@ export const Navbar = () => {
         </nav>
 
         <div className="hidden md:flex items-center gap-3">
+          <button
+            data-testid="navbar-cart-button"
+            onClick={() => setCartOpen(true)}
+            aria-label="Carrito"
+            className="relative h-10 w-10 rounded-full border border-white/10 hover:bg-white/10 flex items-center justify-center transition"
+          >
+            <ShoppingBag size={16} />
+            {count > 0 && (
+              <span
+                data-testid="navbar-cart-count"
+                className="absolute -top-1 -right-1 min-w-5 h-5 px-1.5 rounded-full bg-white text-[10px] font-bold text-black flex items-center justify-center"
+              >
+                {count}
+              </span>
+            )}
+          </button>
           <a
             href="#app"
             data-testid="navbar-app-cta"
@@ -68,14 +86,29 @@ export const Navbar = () => {
           </a>
         </div>
 
-        <button
-          data-testid="mobile-menu-toggle"
-          onClick={() => setOpen((v) => !v)}
-          aria-label="Menú"
-          className="md:hidden inline-flex h-10 w-10 items-center justify-center rounded-full border border-white/10 text-white/80 hover:text-white"
-        >
-          {open ? <X size={18} /> : <Menu size={18} />}
-        </button>
+        <div className="flex md:hidden items-center gap-2">
+          <button
+            data-testid="mobile-cart-button"
+            onClick={() => setCartOpen(true)}
+            aria-label="Carrito"
+            className="relative h-10 w-10 rounded-full border border-white/10 hover:bg-white/10 flex items-center justify-center"
+          >
+            <ShoppingBag size={16} />
+            {count > 0 && (
+              <span className="absolute -top-1 -right-1 min-w-5 h-5 px-1.5 rounded-full bg-white text-[10px] font-bold text-black flex items-center justify-center">
+                {count}
+              </span>
+            )}
+          </button>
+          <button
+            data-testid="mobile-menu-toggle"
+            onClick={() => setOpen((v) => !v)}
+            aria-label="Menú"
+            className="inline-flex h-10 w-10 items-center justify-center rounded-full border border-white/10 text-white/80 hover:text-white"
+          >
+            {open ? <X size={18} /> : <Menu size={18} />}
+          </button>
+        </div>
       </div>
 
       {open && (
