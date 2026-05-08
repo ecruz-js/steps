@@ -72,9 +72,6 @@ class AdvisoryRequest(AdvisoryRequestCreate):
 
 
 # --------- Seed data ---------
-# Imágenes pendientes (productos 3 y 5) usan placeholder estilizado del catálogo
-PLACEHOLDER_IMG = "https://images.unsplash.com/photo-1611591437281-460bfbe1220a?crop=entropy&cs=srgb&fm=jpg&q=85&w=1200"
-
 SEED_PRODUCTS: List[dict] = [
     {
         "id": "prod-pulsera-champion",
@@ -124,7 +121,7 @@ SEED_PRODUCTS: List[dict] = [
             "Cadena hipoalergénica",
         ],
         "colors": ["#D4AF37", "#C0C0C0", "#F4C2C2"],
-        "image": PLACEHOLDER_IMG,
+        "image": "https://customer-assets.emergentagent.com/job_safesteps-app/artifacts/rh9nuhvh_ed1e9674-eb32-449a-afbb-59e084565d04.jpeg",
         "featured": True,
     },
     {
@@ -158,7 +155,7 @@ SEED_PRODUCTS: List[dict] = [
             "Cadena de esferas resistente",
         ],
         "colors": ["#C0C0C0", "#374151", "#0A0A0A"],
-        "image": PLACEHOLDER_IMG,
+        "image": "https://customer-assets.emergentagent.com/job_safesteps-app/artifacts/0ja1rnmy_f699890b-ff19-41d4-b755-0a80b848fb2a.jpeg",
         "featured": False,
     },
     {
