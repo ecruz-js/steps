@@ -9,7 +9,6 @@ const FILTERS = [
   { id: "todos", label: "Todos" },
   { id: "collares", label: "Collares" },
   { id: "pulseras", label: "Pulseras" },
-  { id: "anillos", label: "Anillos" },
   { id: "ganchos", label: "Ganchos" },
 ];
 

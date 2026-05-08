@@ -72,107 +72,127 @@ class AdvisoryRequest(AdvisoryRequestCreate):
 
 
 # --------- Seed data ---------
+# Imágenes pendientes (productos 3 y 5) usan placeholder estilizado del catálogo
+PLACEHOLDER_IMG = "https://images.unsplash.com/photo-1611591437281-460bfbe1220a?crop=entropy&cs=srgb&fm=jpg&q=85&w=1200"
+
 SEED_PRODUCTS: List[dict] = [
     {
-        "id": "prod-collar-aurora",
-        "name": "Collar Aurora",
-        "category": "collares",
-        "price": 89.0,
-        "short_description": "Collar minimalista con botón de pánico discreto.",
-        "description": "Collar de acero inoxidable con dije inteligente. Activa una alerta silenciosa al instante con un doble toque. Conexión Bluetooth con la app Safe Steps.",
-        "benefits": [
-            "Botón de pánico oculto",
-            "Hasta 7 días de batería",
-            "Resistente al agua IP67",
-            "Alerta silenciosa por doble toque",
-        ],
-        "colors": ["#0A0A0A", "#FFFFFF", "#0B1B3A", "#374151"],
-        "image": "https://images.unsplash.com/photo-1680200256120-8ac04eb6f01d?crop=entropy&cs=srgb&fm=jpg&q=85&w=1200",
-        "featured": True,
-    },
-    {
-        "id": "prod-pulsera-orion",
-        "name": "Pulsera Orión",
+        "id": "prod-pulsera-champion",
+        "name": "Pulsera Champion",
         "category": "pulseras",
-        "price": 79.0,
-        "short_description": "Pulsera elegante con GPS de baja energía.",
-        "description": "Diseño tejido con núcleo de seguridad. Comparte tu ubicación en tiempo real con tus contactos de confianza desde la app.",
+        "price": 39.0,
+        "short_description": "Pulsera trenzada con dije balón y chip oculto.",
+        "description": "Pulsera de estilo moderno con doble banda trenzada en negro intenso y detalles metálicos en plateado brillante, protagonizada por un dije de balón en tonos blanco y negro. Perfecta para amantes del deporte que quieren llevar su pasión con estilo. El chip Safe Steps va oculto dentro del dije en forma de balón de fútbol.",
         "benefits": [
-            "GPS de bajo consumo",
-            "Compartir ubicación en vivo",
-            "Vibración háptica de aviso",
-            "Ajuste universal",
+            "Chip Safe Steps oculto en el dije",
+            "Doble banda trenzada resistente",
+            "Disponible en negro intenso o marrón oscuro",
+            "Detalles metálicos plateados",
         ],
-        "colors": ["#0A0A0A", "#0B1B3A", "#1C1C1E"],
-        "image": "https://images.unsplash.com/photo-1762539297259-2bb6eea568e4?crop=entropy&cs=srgb&fm=jpg&q=85&w=1200",
+        "colors": ["#0A0A0A", "#3E2A1A", "#C0C0C0"],
+        "image": "https://customer-assets.emergentagent.com/job_safesteps-app/artifacts/w2d8t7pr_6e0b5fe8-6d48-43b4-8dbd-f990ed6e5537.jpeg",
         "featured": True,
     },
     {
-        "id": "prod-anillo-nova",
-        "name": "Anillo Nova",
-        "category": "anillos",
-        "price": 129.0,
-        "short_description": "Anillo discreto con activación táctil.",
-        "description": "Pieza minimalista con sensor capacitivo. Una pulsación prolongada envía la alerta SOS sin que nadie lo note.",
-        "benefits": [
-            "Sensor capacitivo",
-            "Activación SOS de 3 segundos",
-            "Acabado mate antimicrobiano",
-            "Carga inalámbrica",
-        ],
-        "colors": ["#FFFFFF", "#0A0A0A", "#374151"],
-        "image": "https://images.unsplash.com/photo-1611652022419-a9419f74343d?crop=entropy&cs=srgb&fm=jpg&q=85&w=1200",
-        "featured": False,
-    },
-    {
-        "id": "prod-gancho-luna",
-        "name": "Gancho Luna",
+        "id": "prod-clips-cherry-crystal",
+        "name": "Clips Cherry Crystal",
         "category": "ganchos",
-        "price": 49.0,
-        "short_description": "Gancho para cabello con micrófono ambiental.",
-        "description": "Accesorio elegante que graba audio ambiental cifrado al detectar palabras clave configuradas en la app.",
+        "price": 19.0,
+        "short_description": "Clips con cerezas facetadas y hojas esmeralda.",
+        "description": "Clips decorativos con cerezas facetadas en rojo cristalino y hojas en verde esmeralda, montados sobre una base metálica en plateado. Ideales para looks frescos, juveniles y llenos de vida. El chip Safe Steps va oculto dentro de una de las cerezas.",
         "benefits": [
-            "Detección de palabras clave",
-            "Audio cifrado en la nube",
-            "Diseño ultra ligero",
-            "Modo invitado",
+            "Chip Safe Steps oculto en cereza",
+            "Cristales facetados de alto brillo",
+            "Base metálica plateada",
+            "Diseño juvenil y fresco",
         ],
-        "colors": ["#0A0A0A", "#374151", "#FFFFFF"],
-        "image": "https://images.unsplash.com/photo-1535632787350-4e68ef0ac584?crop=entropy&cs=srgb&fm=jpg&q=85&w=1200",
+        "colors": ["#B8002A", "#0F5132", "#C0C0C0"],
+        "image": "https://customer-assets.emergentagent.com/job_safesteps-app/artifacts/g9lsqo60_0b0eea54-100c-4826-ac85-7732eece2478.jpeg",
         "featured": False,
     },
     {
-        "id": "prod-collar-eclipse",
-        "name": "Collar Eclipse",
+        "id": "prod-collar-sweet-letter",
+        "name": "Collar Sweet Letter",
         "category": "collares",
-        "price": 99.0,
-        "short_description": "Collar largo con doble cápsula tecnológica.",
-        "description": "Diseño en cadena de eslabones con cápsula central que aloja sensor de impacto y luz LED de emergencia.",
+        "price": 45.0,
+        "short_description": "Collar con dije personalizable y lazo rosa.",
+        "description": "Collar elegante con cadena de oro acompañado de un dije de lazo en rosa suave y una inicial personalizable en tono dorado sobre fondo rosado. Un regalo perfecto con significado. El chip Safe Steps va oculto dentro del dije con la inicial. Disponible también en plateado.",
         "benefits": [
-            "Sensor de caída",
-            "LED de emergencia",
+            "Chip Safe Steps en el dije personalizado",
+            "Inicial personalizable A-Z",
+            "Disponible en dorado o plateado",
             "Cadena hipoalergénica",
-            "App compatible iOS/Android",
         ],
-        "colors": ["#0B1B3A", "#0A0A0A"],
-        "image": "https://images.unsplash.com/photo-1599643477877-530eb83abc8e?crop=entropy&cs=srgb&fm=jpg&q=85&w=1200",
+        "colors": ["#D4AF37", "#C0C0C0", "#F4C2C2"],
+        "image": PLACEHOLDER_IMG,
+        "featured": True,
+    },
+    {
+        "id": "prod-pinza-lily-bloom",
+        "name": "Pinza Lily Bloom",
+        "category": "ganchos",
+        "price": 24.0,
+        "short_description": "Pinza dorada con flor blanca perlada.",
+        "description": "Pinza para el cabello en acabado dorado, decorada con una flor en blanco perlado y hojas en verde suave. Su diseño sofisticado la convierte en una pieza única. Ideal para recogidos elegantes o looks delicados del día a día. El chip Safe Steps va oculto dentro de la flor blanca.",
+        "benefits": [
+            "Chip Safe Steps oculto en la flor",
+            "Acabado dorado de larga duración",
+            "Detalles en esmalte resistente",
+            "Cierre firme para todo tipo de cabello",
+        ],
+        "colors": ["#D4AF37", "#FFFFFF", "#0F5132"],
+        "image": "https://customer-assets.emergentagent.com/job_safesteps-app/artifacts/20n8tdsw_d0d51ac7-b60a-4d2e-a07a-1620ce338a5e.jpeg",
         "featured": False,
     },
     {
-        "id": "prod-pulsera-vega",
-        "name": "Pulsera Vega",
-        "category": "pulseras",
-        "price": 69.0,
-        "short_description": "Pulsera tejida con etiqueta NFC privada.",
-        "description": "Pieza sutil y resistente con etiqueta NFC encriptada para compartir información médica de emergencia con un toque.",
+        "id": "prod-collar-year-tag",
+        "name": "Collar Year Tag",
+        "category": "collares",
+        "price": 49.0,
+        "short_description": "Collar urbano con placa grabada y cadena de esferas.",
+        "description": "Collar de estilo urbano con placa metálica alargada en acabado cepillado y un grabado vertical de cuatro dígitos en tipografía digital, ideal para conmemorar un año especial. El diseño se complementa con una cadena de esferas plateada que le aporta un toque moderno y minimalista. El chip Safe Steps va oculto dentro de la placa metálica.",
         "benefits": [
-            "Etiqueta NFC encriptada",
-            "Información médica rápida",
-            "Trenzado resistente",
-            "Personalización por color",
+            "Chip Safe Steps en la placa",
+            "Año personalizable (4 dígitos)",
+            "Acabado cepillado mate",
+            "Cadena de esferas resistente",
         ],
-        "colors": ["#374151", "#0A0A0A", "#FFFFFF"],
-        "image": "https://images.unsplash.com/photo-1611591437281-460bfbe1220a?crop=entropy&cs=srgb&fm=jpg&q=85&w=1200",
+        "colors": ["#C0C0C0", "#374151", "#0A0A0A"],
+        "image": PLACEHOLDER_IMG,
+        "featured": False,
+    },
+    {
+        "id": "prod-pulsera-little-bloom",
+        "name": "Pulsera Little Bloom",
+        "category": "pulseras",
+        "price": 29.0,
+        "short_description": "Pulsera infantil con dije flor y inicial.",
+        "description": "Delicada pulsera infantil en tono dorado que destaca por sus detalles de esferas intercaladas y sus dijes colgantes de esmalte rosa. Incluye una pequeña flor de cinco pétalos y un dije circular con una inicial personalizada, convirtiéndola en un accesorio tierno y ligero para las más pequeñas. El chip Safe Steps va oculto dentro del dije en forma de flor.",
+        "benefits": [
+            "Chip Safe Steps oculto en la flor",
+            "Inicial personalizable",
+            "Tamaño infantil ajustable",
+            "Materiales hipoalergénicos",
+        ],
+        "colors": ["#D4AF37", "#F4C2C2", "#FFFFFF"],
+        "image": "https://customer-assets.emergentagent.com/job_safesteps-app/artifacts/nwo3mm6n_46718b04-e1a8-4208-b5ca-53187a120ebc.jpeg",
+        "featured": True,
+    },
+    {
+        "id": "prod-clips-velvet-cherry",
+        "name": "Clips Velvet Cherry",
+        "category": "ganchos",
+        "price": 22.0,
+        "short_description": "Clips con lazos de terciopelo y cerezas brillantes.",
+        "description": "Clips delicados con lazos en terciopelo rojo vino y cerezas en acabado brillante rojo translúcido, acompañadas de tallos en verde oscuro. Un diseño femenino, dulce y moderno que destaca sin esfuerzo. El chip Safe Steps va oculto dentro de una de las cerezas o dentro de la tela del lazo.",
+        "benefits": [
+            "Chip Safe Steps en cereza o lazo",
+            "Terciopelo de alta calidad",
+            "Cerezas en acabado translúcido brillante",
+            "Hecho a mano",
+        ],
+        "colors": ["#7B1F2E", "#1F4D2A"],
+        "image": "https://customer-assets.emergentagent.com/job_safesteps-app/artifacts/e1zrdjy9_8a078bee-1e87-4199-9356-03ddf55cc37a.jpeg",
         "featured": True,
     },
 ]
@@ -180,11 +200,15 @@ SEED_PRODUCTS: List[dict] = [
 
 @app.on_event("startup")
 async def seed_products():
+    """Upsert seed products. Removes any product no longer in the seed list."""
     try:
-        existing = await db.products.count_documents({})
-        if existing == 0:
-            await db.products.insert_many([{**p} for p in SEED_PRODUCTS])
-            logging.getLogger(__name__).info(f"Seeded {len(SEED_PRODUCTS)} products")
+        for p in SEED_PRODUCTS:
+            await db.products.replace_one({"id": p["id"]}, {**p}, upsert=True)
+        seed_ids = [p["id"] for p in SEED_PRODUCTS]
+        result = await db.products.delete_many({"id": {"$nin": seed_ids}})
+        logging.getLogger(__name__).info(
+            f"Seeded {len(SEED_PRODUCTS)} products; removed {result.deleted_count} stale"
+        )
     except Exception as e:
         logging.getLogger(__name__).exception(f"Seeding error: {e}")
 
