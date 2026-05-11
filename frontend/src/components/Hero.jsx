@@ -1,4 +1,5 @@
 import { ArrowDownToLine, ShoppingBag, ShieldCheck } from "lucide-react";
+import { backendFileUrl } from "@/lib/backendFileUrl";
 
 export const Hero = () => {
   return (
@@ -10,7 +11,7 @@ export const Hero = () => {
       {/* Background image with dark overlay */}
       <div className="absolute inset-0 -z-10">
         <img
-          src="/api/files/home-hero-bg"
+          src={backendFileUrl("/api/files/home-hero-bg")}
           alt=""
           className="w-full h-full object-cover opacity-40"
         />
@@ -94,7 +95,7 @@ export const Hero = () => {
               }}
             >
               <img
-                src="/api/files/home-model-safe-steps"
+                src={backendFileUrl("/api/files/home-model-safe-steps")}
                 alt="Modelo Safe Steps"
                 className="absolute inset-0 w-full h-full object-cover opacity-90"
               />

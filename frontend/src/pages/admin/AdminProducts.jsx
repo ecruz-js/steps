@@ -3,6 +3,7 @@ import axios from "axios";
 import { Plus, Edit3, Trash2, Loader2, X, Upload, Link as LinkIcon, ImageOff, Star } from "lucide-react";
 import { toast } from "sonner";
 import { formatPrice, useSettings } from "@/context/SettingsContext";
+import { backendFileUrl } from "@/lib/backendFileUrl";
 
 const API = `${process.env.REACT_APP_BACKEND_URL}/api`;
 const CATEGORIES = ["collares", "pulseras", "ganchos", "anillos", "otros"];
@@ -106,7 +107,7 @@ export default function AdminProducts() {
                     <div className="flex items-center gap-3">
                       <div className="h-12 w-12 rounded-lg overflow-hidden bg-white/5 border border-white/10 flex items-center justify-center">
                         {p.image ? (
-                          <img src={p.image} alt={p.name} className="h-full w-full object-cover" />
+                          <img src={backendFileUrl(p.image)} alt={p.name} className="h-full w-full object-cover" />
                         ) : (
                           <ImageOff size={14} className="text-white/30" />
                         )}
@@ -356,7 +357,7 @@ const ProductFormModal = ({ initial, onClose, onSaved }) => {
           <div className="grid sm:grid-cols-[140px_1fr] gap-4 items-start">
             <div className="aspect-square rounded-xl overflow-hidden border border-white/10 bg-[#0A0A0A] flex items-center justify-center">
               {form.image ? (
-                <img src={form.image} alt="preview" className="w-full h-full object-cover" />
+                <img src={backendFileUrl(form.image)} alt="preview" className="w-full h-full object-cover" />
               ) : (
                 <ImageOff size={20} className="text-white/30" />
               )}

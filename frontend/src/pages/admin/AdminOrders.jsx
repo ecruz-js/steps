@@ -3,6 +3,7 @@ import axios from "axios";
 import { Loader2, X, Trash2, MessageCircle, Phone, Mail, MapPin } from "lucide-react";
 import { toast } from "sonner";
 import { formatPrice, useSettings } from "@/context/SettingsContext";
+import { backendFileUrl } from "@/lib/backendFileUrl";
 import { StatusBadge } from "@/pages/admin/AdminDashboard";
 
 const API = `${process.env.REACT_APP_BACKEND_URL}/api`;
@@ -257,7 +258,7 @@ const OrderDetail = ({ order, settings, onClose, onStatusChange, onDelete }) => 
                 <div key={i} className="flex items-center gap-3 p-3">
                   {it.image && (
                     <img
-                      src={it.image}
+                      src={backendFileUrl(it.image)}
                       alt={it.name}
                       className="h-12 w-12 rounded-lg object-cover border border-white/10"
                     />

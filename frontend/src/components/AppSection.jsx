@@ -1,4 +1,5 @@
 import { Apple, Smartphone, Bell, MapPin, Lock, Zap } from "lucide-react";
+import { backendFileUrl } from "@/lib/backendFileUrl";
 
 const FEATURES = [
   { icon: Bell, title: "Alertas instantáneas", desc: "Notifica a tus contactos en menos de 2s." },
@@ -29,7 +30,7 @@ export const AppSection = () => {
             />
             <div className="absolute inset-6 rounded-[2rem] overflow-hidden border border-white/10 bg-[#0A0A0A]">
               <img
-                src="/api/files/brand-safe-steps-portada"
+                src={backendFileUrl("/api/files/brand-safe-steps-portada")}
                 alt="Safe Steps app"
                 className="w-full h-full object-cover opacity-90"
               />

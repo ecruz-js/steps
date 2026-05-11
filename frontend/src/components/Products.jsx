@@ -4,6 +4,7 @@ import { ShoppingBag, ArrowUpRight, Check } from "lucide-react";
 import { toast } from "sonner";
 import { useCart } from "@/context/CartContext";
 import { useSettings, formatPrice } from "@/context/SettingsContext";
+import { backendFileUrl } from "@/lib/backendFileUrl";
 
 const API = `${process.env.REACT_APP_BACKEND_URL}/api`;
 
@@ -127,7 +128,7 @@ export const Products = () => {
               >
                 <div className="relative aspect-[4/5] overflow-hidden">
                   <img
-                    src={p.image}
+                    src={backendFileUrl(p.image)}
                     alt={p.name}
                     className="w-full h-full object-cover transition-transform duration-700 hover:scale-105"
                     loading="lazy"

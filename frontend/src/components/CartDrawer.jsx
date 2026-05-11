@@ -3,6 +3,7 @@ import axios from "axios";
 import { X, Minus, Plus, Trash2, ShoppingBag, MessageCircle, Loader2 } from "lucide-react";
 import { useCart } from "@/context/CartContext";
 import { useSettings, formatPrice } from "@/context/SettingsContext";
+import { backendFileUrl } from "@/lib/backendFileUrl";
 import { toast } from "sonner";
 
 const API = `${process.env.REACT_APP_BACKEND_URL}/api`;
@@ -166,7 +167,7 @@ export const CartDrawer = () => {
                     className="flex gap-3 rounded-xl border border-white/10 bg-[#111827]/50 p-3"
                   >
                     <img
-                      src={it.image}
+                      src={backendFileUrl(it.image)}
                       alt={it.name}
                       className="h-20 w-20 rounded-lg object-cover border border-white/10"
                     />
