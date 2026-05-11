@@ -10,7 +10,7 @@ export const Hero = () => {
       {/* Background image with dark overlay */}
       <div className="absolute inset-0 -z-10">
         <img
-          src="https://images.unsplash.com/photo-1642945538257-d1e69abfb085?crop=entropy&cs=srgb&fm=jpg&q=85&w=2400"
+          src="/api/files/home-hero-bg"
           alt=""
           className="w-full h-full object-cover opacity-40"
         />
@@ -94,7 +94,7 @@ export const Hero = () => {
               }}
             >
               <img
-                src="https://images.unsplash.com/photo-1746973506116-7a11e7de61ad?crop=entropy&cs=srgb&fm=jpg&q=85&w=1400"
+                src="/api/files/home-model-safe-steps"
                 alt="Modelo Safe Steps"
                 className="absolute inset-0 w-full h-full object-cover opacity-90"
               />

@@ -189,7 +189,7 @@ const ProductFormModal = ({ initial, onClose, onSaved }) => {
     colors: initial.colors || [],
   });
   const [saving, setSaving] = useState(false);
-  const [imgMode, setImgMode] = useState("url"); // url | upload
+  const [imgMode, setImgMode] = useState("path"); // path | upload
   const [uploading, setUploading] = useState(false);
 
   const set = (k, v) => setForm((f) => ({ ...f, [k]: v }));
@@ -330,14 +330,14 @@ const ProductFormModal = ({ initial, onClose, onSaved }) => {
             <div className="inline-flex rounded-full bg-white/5 p-1 text-[11px] uppercase tracking-[0.14em]">
               <button
                 type="button"
-                onClick={() => setImgMode("url")}
+                onClick={() => setImgMode("path")}
                 className={`px-3 py-1 rounded-full ${
-                  imgMode === "url" ? "bg-white text-black" : "text-white/55"
+                  imgMode === "path" ? "bg-white text-black" : "text-white/55"
                 }`}
                 data-testid="product-img-mode-url"
               >
                 <LinkIcon size={11} className="inline mr-1" />
-                URL
+                Ruta
               </button>
               <button
                 type="button"
@@ -362,12 +362,12 @@ const ProductFormModal = ({ initial, onClose, onSaved }) => {
               )}
             </div>
             <div className="space-y-3">
-              {imgMode === "url" ? (
+              {imgMode === "path" ? (
                 <input
                   data-testid="product-image-url"
                   value={form.image}
                   onChange={(e) => set("image", e.target.value)}
-                  placeholder="https://..."
+                  placeholder="/api/files/prod-pulsera-champion"
                   className="w-full rounded-xl bg-[#0A0A0A] border border-white/10 px-4 py-3 text-sm focus:outline-none focus:border-white/40"
                 />
               ) : (
@@ -390,7 +390,7 @@ const ProductFormModal = ({ initial, onClose, onSaved }) => {
                 </label>
               )}
               <p className="text-xs text-white/40 font-body">
-                La imagen aparecerá en el catálogo público y en las cards. Recomendamos 1080×1300px.
+                Usa una ruta local o sube un archivo. Las imágenes remotas no se aceptan.
               </p>
             </div>
           </div>

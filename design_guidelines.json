@@ -136,39 +136,39 @@
   "media": {
     "logos": {
       "brand_logo": {
-        "url": "https://customer-assets.emergentagent.com/job_8d179e08-0379-4d4b-96f3-81a1c4b666ac/artifacts/k6uestzz_safe%20step%20logo.jpeg",
+        "url": "/api/files/brand-safe-step-logo",
         "description": "Safe Steps Logo"
       },
       "brand_logo_dark": {
-        "url": "https://customer-assets.emergentagent.com/job_8d179e08-0379-4d4b-96f3-81a1c4b666ac/artifacts/lqnvqqt4_safe%20steps%20portada.jpeg",
+        "url": "/api/files/brand-safe-steps-portada",
         "description": "Safe Steps Dark Logo with tagline"
       }
     },
     "mockups": {
       "mobile_reference": {
-        "url": "https://customer-assets.emergentagent.com/job_8d179e08-0379-4d4b-96f3-81a1c4b666ac/artifacts/vi1nidbw_WhatsApp%20Image%202026-05-06%20at%2010.24.59%20PM%20%281%29.jpeg",
+        "url": "/api/files/mockups-mobile-reference",
         "description": "Mobile app mockup reference for App Section"
       },
       "desktop_reference": {
-        "url": "https://customer-assets.emergentagent.com/job_8d179e08-0379-4d4b-96f3-81a1c4b666ac/artifacts/k6oowgru_WhatsApp%20Image%202026-05-06%20at%2010.24.59%20PM.jpeg",
+        "url": "/api/files/mockups-desktop-reference",
         "description": "Desktop mockup reference"
       }
     },
     "images": {
       "hero_bg": {
-        "url": "https://images.unsplash.com/photo-1642945538257-d1e69abfb085?crop=entropy&cs=srgb&fm=jpg&ixid=M3w4NjY2NzV8MHwxfHNlYXJjaHwyfHxkYXJrJTIwbHV4dXJ5JTIwbWluaW1hbCUyMGFic3RyYWN0JTIwYmFja2dyb3VuZHxlbnwwfHx8fDE3NzgyNjczMTB8MA&ixlib=rb-4.1.0&q=85",
+        "url": "/api/files/home-hero-bg",
         "description": "Abstract dark luxury background for Hero section"
       },
       "product_necklace": {
-        "url": "https://images.unsplash.com/photo-1680200256120-8ac04eb6f01d?crop=entropy&cs=srgb&fm=jpg&ixid=M3w4NjA1MDZ8MHwxfHNlYXJjaHw0fHxtaW5pbWFsaXN0JTIwZWxlZ2FudCUyMG5lY2tsYWNlJTIwamV3ZWxyeSUyMGRhcmslMjBiYWNrZ3JvdW5kfGVufDB8fHx8MTc3ODI2NzMxMHww&ixlib=rb-4.1.0&q=85",
+        "url": "/api/files/prod-collar-sweet-letter",
         "description": "Minimalist elegant necklace in dark setting for product gallery"
       },
       "product_bracelet": {
-        "url": "https://images.unsplash.com/photo-1762539297259-2bb6eea568e4?crop=entropy&cs=srgb&fm=jpg&ixid=M3w3NDQ2NDF8MHwxfHNlYXJjaHwyfHxtaW5pbWFsaXN0JTIwZWxlZ2FudCUyMGJyYWNlbGV0JTIwamV3ZWxyeSUyMGRhcmslMjBiYWNrZ3JvdW5kfGVufDB8fHx8MTc3ODI2NzMxMHww&ixlib=rb-4.1.0&q=85",
+        "url": "/api/files/prod-pulsera-champion",
         "description": "Elegant bracelet/beads in dark setting for product gallery"
       },
       "lifestyle_about": {
-        "url": "https://images.unsplash.com/photo-1746973506116-7a11e7de61ad?crop=entropy&cs=srgb&fm=jpg&ixid=M3w4NjAzMzJ8MHwxfHNlYXJjaHw0fHx3b21hbiUyMHdlYXJpbmclMjBlbGVnYW50JTIwbWluaW1hbGlzdCUyMG5lY2tsYWNlJTIwZGFyayUyMGJhY2tncm91bmR8ZW58MHx8fHwxNzc4MjY3MzAwfDA&ixlib=rb-4.1.0&q=85",
+        "url": "/api/files/home-model-safe-steps",
         "description": "Woman in dramatic lighting, luxury jewelry lifestyle shot for About or App section"
       }
     }

@@ -9,7 +9,7 @@ import logging
 import uuid
 import bcrypt
 import jwt as pyjwt
-import requests
+import re
 from datetime import datetime, timezone, timedelta
 from typing import List, Optional, Literal
 
@@ -22,9 +22,10 @@ from fastapi import (
     UploadFile,
     File,
 )
+from fastapi.responses import Response
 from starlette.middleware.cors import CORSMiddleware
 from motor.motor_asyncio import AsyncIOMotorClient
-from pydantic import BaseModel, Field, EmailStr, ConfigDict
+from pydantic import BaseModel, Field, EmailStr, ConfigDict, field_validator
 
 
 # --------- Config ---------
@@ -37,9 +38,12 @@ JWT_ALGO = "HS256"
 ADMIN_EMAIL = os.environ.get("ADMIN_EMAIL", "admin@safesteps.app")
 ADMIN_PASSWORD = os.environ.get("ADMIN_PASSWORD", "admin123")
 APP_NAME = os.environ.get("APP_NAME", "safesteps")
-
-STORAGE_URL = "https://integrations.emergentagent.com/objstore/api/v1/storage"
-EMERGENT_KEY = os.environ.get("EMERGENT_LLM_KEY")
+DEFAULT_PRODUCT_IMAGE = "/api/files/prod-pulsera-champion"
+LEGACY_PRODUCT_PLACEHOLDER = "/images/products/safe-steps-product.svg"
+APPWRITE_ENDPOINT = os.environ.get("APPWRITE_ENDPOINT", "https://cloud.appwrite.io/v1").strip()
+APPWRITE_PROJECT_ID = os.environ.get("APPWRITE_PROJECT_ID", "").strip()
+APPWRITE_BUCKET_ID = os.environ.get("APPWRITE_BUCKET_ID", "").strip()
+APPWRITE_API_KEY = os.environ.get("APPWRITE_API_KEY", "").strip()
 
 DEFAULT_WHATSAPP_NUMBER = "+18095551234"
 
@@ -90,50 +94,91 @@ async def get_current_admin(request: Request) -> dict:
     return user
 
 
-# --------- Object storage ---------
-storage_key: Optional[str] = None
+# --------- Appwrite file storage ---------
+appwrite_storage = None
 
 
-def init_storage() -> Optional[str]:
-    global storage_key
-    if storage_key:
-        return storage_key
-    if not EMERGENT_KEY:
-        logger.warning("EMERGENT_LLM_KEY missing; storage disabled")
-        return None
-    try:
-        r = requests.post(f"{STORAGE_URL}/init", json={"emergent_key": EMERGENT_KEY}, timeout=30)
-        r.raise_for_status()
-        storage_key = r.json()["storage_key"]
-        logger.info("Storage initialized")
-        return storage_key
-    except Exception as e:
-        logger.exception(f"Storage init failed: {e}")
-        return None
+def is_remote_url(value: Optional[str]) -> bool:
+    return bool(value and value.lower().startswith(("http://", "https://")))
 
 
-def put_object(path: str, data: bytes, content_type: str) -> dict:
-    key = init_storage()
-    if not key:
-        raise HTTPException(status_code=500, detail="Storage no disponible")
-    r = requests.put(
-        f"{STORAGE_URL}/objects/{path}",
-        headers={"X-Storage-Key": key, "Content-Type": content_type},
-        data=data,
-        timeout=120,
-    )
-    if r.status_code == 403:
-        # storage_key expired — refresh and retry once
-        globals()["storage_key"] = None
-        key = init_storage()
-        r = requests.put(
-            f"{STORAGE_URL}/objects/{path}",
-            headers={"X-Storage-Key": key, "Content-Type": content_type},
-            data=data,
-            timeout=120,
+def normalize_image(value: Optional[str]) -> str:
+    if not value or is_remote_url(value):
+        return DEFAULT_PRODUCT_IMAGE
+    return value
+
+
+def reject_remote_image(value: Optional[str]) -> Optional[str]:
+    if is_remote_url(value):
+        raise ValueError("La imagen debe ser una ruta local o una subida interna.")
+    return value
+
+
+def require_appwrite_config() -> None:
+    missing = [
+        name
+        for name, value in {
+            "APPWRITE_ENDPOINT": APPWRITE_ENDPOINT,
+            "APPWRITE_PROJECT_ID": APPWRITE_PROJECT_ID,
+            "APPWRITE_BUCKET_ID": APPWRITE_BUCKET_ID,
+            "APPWRITE_API_KEY": APPWRITE_API_KEY,
+        }.items()
+        if not value
+    ]
+    if missing:
+        raise HTTPException(
+            status_code=500,
+            detail=f"Appwrite no configurado. Faltan: {', '.join(missing)}",
         )
-    r.raise_for_status()
-    return r.json()
+
+
+def get_appwrite_storage():
+    global appwrite_storage
+    require_appwrite_config()
+    if appwrite_storage:
+        return appwrite_storage
+    try:
+        from appwrite.client import Client
+        from appwrite.services.storage import Storage
+    except ImportError:
+        raise HTTPException(status_code=500, detail="SDK de Appwrite no instalado")
+
+    client = Client()
+    client.set_endpoint(APPWRITE_ENDPOINT)
+    client.set_project(APPWRITE_PROJECT_ID)
+    client.set_key(APPWRITE_API_KEY)
+    appwrite_storage = Storage(client)
+    return appwrite_storage
+
+
+def make_file_id() -> str:
+    return uuid.uuid4().hex
+
+
+def safe_filename(filename: Optional[str], ext: str) -> str:
+    raw = filename or f"upload.{ext}"
+    cleaned = re.sub(r"[^A-Za-z0-9._-]+", "-", raw).strip(".-")
+    return cleaned or f"upload.{ext}"
+
+
+def put_object(file_id: str, filename: str, data: bytes, content_type: str) -> dict:
+    try:
+        from appwrite.input_file import InputFile
+    except ImportError:
+        raise HTTPException(status_code=500, detail="SDK de Appwrite no instalado")
+
+    storage = get_appwrite_storage()
+    result = storage.create_file(
+        bucket_id=APPWRITE_BUCKET_ID,
+        file_id=file_id,
+        file=InputFile.from_bytes(data, filename=filename, mime_type=content_type),
+    )
+    payload = result.model_dump() if hasattr(result, "model_dump") else dict(result)
+    return {
+        "path": payload.get("$id") or payload.get("id") or file_id,
+        "size": payload.get("sizeOriginal") or payload.get("sizeoriginal") or len(data),
+        "content_type": payload.get("mimeType") or payload.get("mimetype") or content_type,
+    }
 
 
 # --------- Models ---------
@@ -152,6 +197,11 @@ class Product(BaseModel):
     active: bool = True
     stock: int = 99
 
+    @field_validator("image", mode="before")
+    @classmethod
+    def normalize_product_image(cls, value: Optional[str]) -> str:
+        return normalize_image(value)
+
 
 class ProductCreate(BaseModel):
     name: str
@@ -166,6 +216,11 @@ class ProductCreate(BaseModel):
     active: bool = True
     stock: int = 99
 
+    @field_validator("image")
+    @classmethod
+    def validate_product_image(cls, value: str) -> str:
+        return reject_remote_image(value) or DEFAULT_PRODUCT_IMAGE
+
 
 class ProductUpdate(BaseModel):
     name: Optional[str] = None
@@ -179,6 +234,11 @@ class ProductUpdate(BaseModel):
     featured: Optional[bool] = None
     active: Optional[bool] = None
     stock: Optional[int] = None
+
+    @field_validator("image")
+    @classmethod
+    def validate_product_image(cls, value: Optional[str]) -> Optional[str]:
+        return reject_remote_image(value)
 
 
 class ContactMessageCreate(BaseModel):
@@ -201,6 +261,11 @@ class OrderItem(BaseModel):
     quantity: int
     color: Optional[str] = None
     image: Optional[str] = None
+
+    @field_validator("image", mode="before")
+    @classmethod
+    def normalize_order_image(cls, value: Optional[str]) -> str:
+        return normalize_image(value)
 
 
 class OrderCreate(BaseModel):
@@ -265,7 +330,7 @@ SEED_PRODUCTS: List[dict] = [
             "Detalles metálicos plateados",
         ],
         "colors": ["#0A0A0A", "#3E2A1A", "#C0C0C0"],
-        "image": "https://customer-assets.emergentagent.com/job_safesteps-app/artifacts/w2d8t7pr_6e0b5fe8-6d48-43b4-8dbd-f990ed6e5537.jpeg",
+        "image": "/api/files/prod-pulsera-champion",
         "featured": True,
         "active": True,
         "stock": 50,
@@ -284,7 +349,7 @@ SEED_PRODUCTS: List[dict] = [
             "Diseño juvenil y fresco",
         ],
         "colors": ["#B8002A", "#0F5132", "#C0C0C0"],
-        "image": "https://customer-assets.emergentagent.com/job_safesteps-app/artifacts/g9lsqo60_0b0eea54-100c-4826-ac85-7732eece2478.jpeg",
+        "image": "/api/files/prod-clips-cherry-crystal",
         "featured": False,
         "active": True,
         "stock": 80,
@@ -303,7 +368,7 @@ SEED_PRODUCTS: List[dict] = [
             "Cadena hipoalergénica",
         ],
         "colors": ["#D4AF37", "#C0C0C0", "#F4C2C2"],
-        "image": "https://customer-assets.emergentagent.com/job_safesteps-app/artifacts/rh9nuhvh_ed1e9674-eb32-449a-afbb-59e084565d04.jpeg",
+        "image": "/api/files/prod-collar-sweet-letter",
         "featured": True,
         "active": True,
         "stock": 40,
@@ -322,7 +387,7 @@ SEED_PRODUCTS: List[dict] = [
             "Cierre firme para todo tipo de cabello",
         ],
         "colors": ["#D4AF37", "#FFFFFF", "#0F5132"],
-        "image": "https://customer-assets.emergentagent.com/job_safesteps-app/artifacts/20n8tdsw_d0d51ac7-b60a-4d2e-a07a-1620ce338a5e.jpeg",
+        "image": "/api/files/prod-pinza-lily-bloom",
         "featured": False,
         "active": True,
         "stock": 60,
@@ -341,7 +406,7 @@ SEED_PRODUCTS: List[dict] = [
             "Cadena de esferas resistente",
         ],
         "colors": ["#C0C0C0", "#374151", "#0A0A0A"],
-        "image": "https://customer-assets.emergentagent.com/job_safesteps-app/artifacts/0ja1rnmy_f699890b-ff19-41d4-b755-0a80b848fb2a.jpeg",
+        "image": "/api/files/prod-collar-year-tag",
         "featured": False,
         "active": True,
         "stock": 35,
@@ -360,7 +425,7 @@ SEED_PRODUCTS: List[dict] = [
             "Materiales hipoalergénicos",
         ],
         "colors": ["#D4AF37", "#F4C2C2", "#FFFFFF"],
-        "image": "https://customer-assets.emergentagent.com/job_safesteps-app/artifacts/nwo3mm6n_46718b04-e1a8-4208-b5ca-53187a120ebc.jpeg",
+        "image": "/api/files/prod-pulsera-little-bloom",
         "featured": True,
         "active": True,
         "stock": 45,
@@ -379,7 +444,7 @@ SEED_PRODUCTS: List[dict] = [
             "Hecho a mano",
         ],
         "colors": ["#7B1F2E", "#1F4D2A"],
-        "image": "https://customer-assets.emergentagent.com/job_safesteps-app/artifacts/e1zrdjy9_8a078bee-1e87-4199-9356-03ddf55cc37a.jpeg",
+        "image": "/api/files/prod-clips-velvet-cherry",
         "featured": True,
         "active": True,
         "stock": 70,
@@ -425,6 +490,30 @@ async def startup():
                 {"$setOnInsert": {**p}},
                 upsert=True,
             )
+            await db.products.update_one(
+                {
+                    "id": p["id"],
+                    "$or": [
+                        {"image": {"$regex": r"^https?://", "$options": "i"}},
+                        {"image": {"$exists": False}},
+                        {"image": ""},
+                        {"image": DEFAULT_PRODUCT_IMAGE},
+                        {"image": LEGACY_PRODUCT_PLACEHOLDER},
+                        {"image": {"$regex": r"^/images/", "$options": "i"}},
+                    ],
+                },
+                {"$set": {"image": p["image"]}},
+            )
+        await db.orders.update_many(
+            {"items.image": {"$regex": r"^https?://", "$options": "i"}},
+            {"$set": {"items.$[item].image": DEFAULT_PRODUCT_IMAGE}},
+            array_filters=[{"item.image": {"$regex": r"^https?://", "$options": "i"}}],
+        )
+        await db.orders.update_many(
+            {"items.image": LEGACY_PRODUCT_PLACEHOLDER},
+            {"$set": {"items.$[item].image": DEFAULT_PRODUCT_IMAGE}},
+            array_filters=[{"item.image": LEGACY_PRODUCT_PLACEHOLDER}],
+        )
         # do NOT delete — admin may have created custom products
         logger.info(f"Ensured {len(SEED_PRODUCTS)} seed products exist")
     except Exception as e:
@@ -433,9 +522,6 @@ async def startup():
     # Seed default settings if missing
     if not await db.settings.find_one({"id": "global"}):
         await db.settings.insert_one({"id": "global", **Settings().model_dump()})
-
-    # Init storage (non-blocking)
-    init_storage()
 
 
 # --------- Public routes ---------
@@ -619,7 +705,6 @@ MAX_UPLOAD_BYTES = 5 * 1024 * 1024  # 5 MB
 
 @api_router.post("/admin/upload")
 async def admin_upload(
-    request: Request,
     file: UploadFile = File(...),
     admin: dict = Depends(get_current_admin),
 ):
@@ -629,33 +714,49 @@ async def admin_upload(
     if len(data) > MAX_UPLOAD_BYTES:
         raise HTTPException(status_code=413, detail="Archivo demasiado grande (máx. 5 MB)")
     ext = file.filename.split(".")[-1].lower() if file.filename and "." in file.filename else "bin"
-    path = f"{APP_NAME}/products/{uuid.uuid4().hex}.{ext}"
-    result = put_object(path, data, file.content_type)
+    file_id = make_file_id()
+    filename = safe_filename(file.filename, ext)
+    result = put_object(file_id, filename, data, file.content_type)
     await db.uploads.insert_one({
         "id": str(uuid.uuid4()),
         "storage_path": result["path"],
+        "filename": filename,
         "size": result.get("size", len(data)),
         "content_type": file.content_type,
         "uploaded_by": admin["id"],
         "created_at": now_iso(),
     })
-    base = str(request.base_url).rstrip("/")
-    public_url = f"{base}/api/files/{result['path']}"
+    public_url = f"/api/files/{result['path']}"
     return {"url": public_url, "path": result["path"], "size": result.get("size", len(data))}
 
 
 # --------- File serving (public, no auth — products must show on public site) ---------
 @api_router.get("/files/{path:path}")
 async def serve_file(path: str):
-    from fastapi.responses import Response
-    key = init_storage()
-    if not key:
-        raise HTTPException(status_code=500, detail="Storage no disponible")
-    r = requests.get(f"{STORAGE_URL}/objects/{path}", headers={"X-Storage-Key": key}, timeout=60)
-    if r.status_code == 404:
+    storage = get_appwrite_storage()
+    upload = await db.uploads.find_one({"storage_path": path}, {"_id": 0})
+    media_type = (upload or {}).get("content_type")
+    if not media_type:
+        try:
+            metadata = storage.get_file(
+                bucket_id=APPWRITE_BUCKET_ID,
+                file_id=path,
+            )
+            payload = metadata.model_dump() if hasattr(metadata, "model_dump") else dict(metadata)
+            media_type = payload.get("mimeType") or payload.get("mimetype")
+        except Exception:
+            media_type = None
+
+    try:
+        content = storage.get_file_view(
+            bucket_id=APPWRITE_BUCKET_ID,
+            file_id=path,
+        )
+    except Exception as e:
+        logger.exception(f"Appwrite file fetch failed: {e}")
         raise HTTPException(status_code=404, detail="Archivo no encontrado")
-    r.raise_for_status()
-    return Response(content=r.content, media_type=r.headers.get("Content-Type", "application/octet-stream"))
+
+    return Response(content=content, media_type=media_type or "application/octet-stream")
 
 
 # --------- Wire up ---------

@@ -29,7 +29,7 @@ export const AppSection = () => {
             />
             <div className="absolute inset-6 rounded-[2rem] overflow-hidden border border-white/10 bg-[#0A0A0A]">
               <img
-                src="https://customer-assets.emergentagent.com/job_8d179e08-0379-4d4b-96f3-81a1c4b666ac/artifacts/lqnvqqt4_safe%20steps%20portada.jpeg"
+                src="/api/files/brand-safe-steps-portada"
                 alt="Safe Steps app"
                 className="w-full h-full object-cover opacity-90"
               />
